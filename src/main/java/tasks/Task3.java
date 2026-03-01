@@ -4,6 +4,7 @@ import common.Person;
 import java.util.Collection;
 import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /*
 Задача 3
@@ -14,10 +15,10 @@ public class Task3 {
 
   public static List<Person> sort(Collection<Person> persons) {
     return persons.stream()
-            .sorted(Comparator.comparing(Person::secondName)
-                .thenComparing(Person::firstName)
-                .thenComparing(Person::createdAt)
-            ).toList();
+            .sorted(Comparator.comparing(Person::secondName, Comparator.nullsLast(String::compareTo))
+                  .thenComparing(Person::firstName, Comparator.nullsLast(String::compareTo))
+                  .thenComparing(Person::createdAt, Comparator.nullsLast(Comparator.naturalOrder()))
+            ).collect(Collectors.toList());
   }
 
 }
