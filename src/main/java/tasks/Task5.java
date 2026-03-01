@@ -6,8 +6,6 @@ import common.PersonConverter;
 
 import java.util.List;
 import java.util.Map;
-import java.util.function.Function;
-import java.util.stream.Collectors;
 
 /*
 Задача 5
@@ -25,9 +23,8 @@ public class Task5 {
   }
 
   public List<ApiPersonDto> convert(List<Person> persons, Map<Integer, Integer> personAreaIds) {
-    return persons.stream().map(person -> {
-      Integer areaId = personAreaIds.get(person.id());
-      return personConverter.convert(person, areaId);
-    }).toList();
+    return persons.stream()
+            .map(person -> personConverter.convert(person, personAreaIds.get(person.id())))
+            .toList();
   }
 }
