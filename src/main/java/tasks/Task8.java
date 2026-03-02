@@ -25,14 +25,18 @@ public class Task8 {
 
     Set<Integer> personIds = persons.stream().map(Person::id).collect(Collectors.toSet());
 
-    Map<Integer, List<Resume>> resumes = personService.findResumes(personIds).stream()
-            .collect(Collectors.groupingBy(Resume::personId));
+    Map<Integer, Set<Resume>> resumes = personService.findResumes(personIds).stream()
+            .collect(Collectors.groupingBy(
+                Resume::personId,
+                Collectors.toSet()
+            ));
 
     return persons.stream()
-            .map(person -> {
-              Set<Resume> set = new HashSet<>(resumes.getOrDefault(person.id(), Collections.emptyList()));
-              return new PersonWithResumes(person, set);
-            }).collect(Collectors.toSet());
+            .map(person -> new PersonWithResumes(
+                    person,
+                    resumes.getOrDefault(person.id(), Collections.emptySet())
+            ))
+            .collect(Collectors.toSet());
   }
 
 }
